@@ -112,6 +112,7 @@ Für Lauftexte, Hinweise und Programminformationen steht ein separates, animiert
 ### Banner in OBS einrichten
 
 1. In OBS eine neue **Browser Source** hinzufügen.
+
 2. Als URL eintragen:
 
    ```text
@@ -119,15 +120,25 @@ Für Lauftexte, Hinweise und Programminformationen steht ein separates, animiert
    ```
 
 3. Die Größe auf **1920 × 1080** setzen.
+
 4. Die Browser Source oberhalb der übrigen Szenenelemente anordnen.
 
 ### Banner steuern
 
-Die Steueroberfläche ist unter [http://localhost:5173/info-banner-control.html](http://localhost:5173/info-banner-control.html) erreichbar.
+Das Info-Banner kann direkt im **normalen Control Panel** bearbeitet und gesteuert werden. Eine separate Steuerseite ist dafür nicht erforderlich.
 
-Dort können Überschrift und Zusatztext eingegeben und anschließend über **Banner einblenden** angezeigt werden.
+Dort können unter anderem:
+
+* Überschrift
+* Zusatztext
+* Anzeigezustand
+
+angepasst werden.
+
+Über **Banner einblenden** wird das Banner direkt in der OBS Browser Source angezeigt.
 
 Das Banner blendet animiert ein und aus. Der übrige OBS-Canvas bleibt dabei vollständig transparent.
+
 
 ---
 
