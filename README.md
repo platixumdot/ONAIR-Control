@@ -25,7 +25,7 @@ npm install
 Entwicklungsserver starten:
 
 ```powershell
-npm run dev -- --host
+npm run dev
 ```
 
 Anschließend ist die Anwendung unter [http://localhost:5173](http://localhost:5173) erreichbar.
