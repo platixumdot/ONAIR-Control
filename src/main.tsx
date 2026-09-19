@@ -385,6 +385,16 @@ function LiveTools({ s, r }: { s: State; r: Runtime }) {
     });
   };
 
+  const saveBanner = async (visible = b.visible) => {
+    const payload = { ...b, visible };
+    setB(payload);
+    await fetch('/api/banner', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  };
+
   const selectedInput = r.inputSources.find((x) => x.name === inputName) ?? null;
 
   return (
@@ -431,14 +441,31 @@ function LiveTools({ s, r }: { s: State; r: Runtime }) {
 
       <Divider my="md" />
       <Text fw={700} size="sm">Info Banner</Text>
+      <TextInput
+        mt="xs"
+        label="Überschrift"
+        value={b.headline}
+        onChange={(e) => setB((prev) => ({ ...prev, headline: e.target.value }))}
+        placeholder="Zum Beispiel: Kurze technische Pause"
+      />
+      <TextInput
+        mt="xs"
+        label="Text"
+        value={b.detail}
+        onChange={(e) => setB((prev) => ({ ...prev, detail: e.target.value }))}
+        placeholder="Wir sind gleich zurück."
+      />
       <Group grow mt="xs">
-        <Button size="xs" onClick={() => setBannerVisibility(true)}>
+        <Button size="xs" onClick={() => saveBanner(true)}>
           Einblenden
         </Button>
-        <Button size="xs" variant="default" onClick={() => setBannerVisibility(false)}>
+        <Button size="xs" variant="default" onClick={() => saveBanner(false)}>
           Ausblenden
         </Button>
       </Group>
+      <Button size="xs" variant="subtle" fullWidth mt="xs" onClick={() => saveBanner(b.visible)}>
+        Text speichern
+      </Button>
 
       {r.musicInputs.length > 0 && (
         <>
@@ -459,31 +486,55 @@ function LiveTools({ s, r }: { s: State; r: Runtime }) {
       {r.inputSources.length > 0 && (
         <>
           <Divider my="md" />
-          <Text fw={700} size="sm">Eingabe Quellen</Text>
-          <Select
-            data={r.inputSources.map((src) => ({ value: src.name, label: src.name }))}
-            value={inputName}
-            onChange={(v) => setInputName(v || '')}
-            placeholder="Mikrofon wählen"
-          />
-          <Group grow mt="xs">
-            <Button
-              size="xs"
-              color={selectedInput?.muted ? 'teal' : 'red'}
-              disabled={!selectedInput}
-              onClick={() => selectedInput && api('inputMute', { input: selectedInput.name, muted: !selectedInput.muted })}
-            >
-              {selectedInput?.muted ? 'Unmute' : 'Mute'}
-            </Button>
-            <Button
-              size="xs"
-              variant="default"
-              disabled={!selectedInput}
-              onClick={() => selectedInput && api('inputMute', { input: selectedInput.name, muted: true })}
-            >
-              Stumm
-            </Button>
+          <Group justify="space-between" align="center">
+            <Text fw={700} size="sm">Mikrofone</Text>
+            <Badge color={selectedInput?.muted ? 'gray' : 'teal'} variant={selectedInput?.muted ? 'light' : 'filled'}>
+              {selectedInput ? (selectedInput.muted ? 'Stumm' : 'Aktiv') : 'Ausgewählt'}
+            </Badge>
           </Group>
+
+          <SimpleGrid cols={{ base: 1, sm: 2 }} mt="sm">
+            {r.inputSources.map((src) => {
+              const isSelected = inputName === src.name;
+              const isMuted = src.muted;
+
+              return (
+                <Paper
+                  key={src.name}
+                  p="xs"
+                  withBorder
+                  radius="sm"
+                  style={{
+                    borderColor: isSelected ? '#4dabf7' : undefined,
+                    background: isMuted ? '#1f252d' : '#17212e',
+                  }}
+                >
+                  <Group justify="space-between" wrap="nowrap">
+                    <Stack gap={4} style={{ minWidth: 0 }}>
+                      <Text size="xs" c={isSelected ? 'blue' : 'dimmed'} fw={700} lineClamp={1}>
+                        {src.name}
+                      </Text>
+                      <Badge size="xs" color={isMuted ? 'gray' : 'teal'} variant={isMuted ? 'light' : 'filled'}>
+                        {isMuted ? 'Aus' : 'Ein'}
+                      </Badge>
+                    </Stack>
+
+                    <Button
+                      size="compact-xs"
+                      color={isMuted ? 'teal' : 'red'}
+                      variant={isSelected ? 'filled' : 'light'}
+                      onClick={() => {
+                        setInputName(src.name);
+                        api('inputMute', { input: src.name, muted: !src.muted });
+                      }}
+                    >
+                      {isMuted ? 'Unmute' : 'Mute'}
+                    </Button>
+                  </Group>
+                </Paper>
+              );
+            })}
+          </SimpleGrid>
         </>
       )}
     </Paper>

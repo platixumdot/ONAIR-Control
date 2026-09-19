@@ -36,16 +36,16 @@
     }
   ],
   "lowerThird": {
-    "id": "fb8599ff-0c44-40d1-bbff-55eff45472ce",
-    "name": "Platix",
-    "role": "CEO",
-    "company": "Serverix",
+    "id": "4a20895f-30ea-440f-9d83-9c461b918a72",
+    "name": "Neel",
+    "role": "Gast",
+    "company": "",
     "color": "#1677ff",
-    "initials": "P"
+    "initials": "N"
   },
   "lowerThirdVisible": false,
   "countdown": {
-    "endsAt": 1789835203310,
+    "endsAt": 1789850720586,
     "visible": true,
     "title": "STREAM STARTS IN"
   },
@@ -57,8 +57,8 @@
     "F5": ""
   },
   "infoBanner": {
-    "visible": false,
-    "headline": "Nümbrecht - Ort Cam",
-    "detail": "Live vom Dorfplatz"
+    "visible": true,
+    "headline": "Information ",
+    "detail": "Aktuell haben wir Fehler bei der Audio. Bitte habt gedult!"
   }
 }
