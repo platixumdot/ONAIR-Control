@@ -2,7 +2,7 @@
   "version": 2,
   "obs": {
     "url": "ws://127.0.0.1:4455",
-    "password": "Yj6WHVakL0XGmuQj"
+    "password": ""
   },
   "branding": {
     "primary": "#008cff",
@@ -28,26 +28,12 @@
     },
     {
       "id": "4a20895f-30ea-440f-9d83-9c461b918a72",
-      "name": "Neel",
-      "role": "Gast",
-      "company": "",
+      "name": "XX",
+      "role": "XX",
+      "company": "XX",
       "color": "#1677ff",
-      "initials": "N"
+      "initials": "X"
     }
-  ],
-  "lowerThird": {
-    "id": "4a20895f-30ea-440f-9d83-9c461b918a72",
-    "name": "Neel",
-    "role": "Gast",
-    "company": "",
-    "color": "#1677ff",
-    "initials": "N"
-  },
-  "lowerThirdVisible": false,
-  "countdown": {
-    "endsAt": 1789850720586,
-    "visible": true,
-    "title": "STREAM STARTS IN"
   },
   "hotkeys": {
     "F1": "",
@@ -58,7 +44,7 @@
   },
   "infoBanner": {
     "visible": true,
-    "headline": "Information ",
-    "detail": "Aktuell haben wir Fehler bei der Audio. Bitte habt gedult!"
+    "headline": "XX",
+    "detail": "XXX"
   }
 }
