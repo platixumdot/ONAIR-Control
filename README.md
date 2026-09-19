@@ -139,7 +139,6 @@ angepasst werden.
 
 Das Banner blendet animiert ein und aus. Der übrige OBS-Canvas bleibt dabei vollständig transparent.
 
-
 ---
 
 ## Daten und Persistenz

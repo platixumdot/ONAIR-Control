@@ -625,9 +625,13 @@ footer{
 .obs-scene:hover{border-color:var(--line-2);background:var(--panel-2)}
 .obs-scene.program{border-color:var(--live);box-shadow:inset 0 0 0 1px var(--live)}
 .obs-scene.preview{border-color:var(--ok)}
-.obs-scene svg{color:var(--ink-dim)}
-.obs-scene b{font-size:12px;font-weight:600}
-.obs-scene small{font:9px var(--mono);color:var(--ink-faint);margin-top:auto;letter-spacing:.5px}
+.obs-scene-main{appearance:none;border:0;background:transparent;color:inherit;text-align:left;display:flex;flex-direction:column;gap:9px;cursor:pointer;padding:0}
+.obs-scene-main svg{color:var(--ink-dim)}
+.obs-scene-main b{font-size:12px;font-weight:600}
+.obs-scene-main small{font:9px var(--mono);color:var(--ink-faint);margin-top:auto;letter-spacing:.5px}
+.obs-scene-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:auto}
+.obs-scene-actions button{appearance:none;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);border-radius:8px;padding:6px 8px;font:700 10px var(--mono);letter-spacing:.5px;cursor:pointer;transition:border-color .12s ease,background .12s ease}
+.obs-scene-actions button:hover{border-color:var(--line-2);background:var(--panel-3)}
 .people-list{grid-column:span 2}
 .person-card{background:var(--panel)}
 .person-card:hover{border-color:var(--brand)}
