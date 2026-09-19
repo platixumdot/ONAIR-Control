@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "obs": {
+    "url": "ws://127.0.0.1:4455",
+    "password": "Yj6WHVakL0XGmuQj"
+  },
+  "branding": {
+    "primary": "#008cff",
+    "accent": "#3ee1b7",
+    "show": ""
+  },
+  "people": [
+    {
+      "id": "fb8599ff-0c44-40d1-bbff-55eff45472ce",
+      "name": "Platix",
+      "role": "CEO",
+      "company": "Serverix",
+      "color": "#1677ff",
+      "initials": "P"
+    },
+    {
+      "id": "6b74406d-b702-4b96-8d58-5bcdd03ee0a2",
+      "name": "Lukas",
+      "role": "Goonen",
+      "company": "",
+      "color": "#1677ff",
+      "initials": "L"
+    },
+    {
+      "id": "4a20895f-30ea-440f-9d83-9c461b918a72",
+      "name": "Neel",
+      "role": "Gast",
+      "company": "",
+      "color": "#1677ff",
+      "initials": "N"
+    }
+  ],
+  "lowerThird": {
+    "id": "fb8599ff-0c44-40d1-bbff-55eff45472ce",
+    "name": "Platix",
+    "role": "CEO",
+    "company": "Serverix",
+    "color": "#1677ff",
+    "initials": "P"
+  },
+  "lowerThirdVisible": false,
+  "countdown": {
+    "endsAt": 1789835203310,
+    "visible": true,
+    "title": "STREAM STARTS IN"
+  },
+  "hotkeys": {
+    "F1": "",
+    "F2": "",
+    "F3": "",
+    "F4": "",
+    "F5": ""
+  },
+  "infoBanner": {
+    "visible": false,
+    "headline": "Nümbrecht - Ort Cam",
+    "detail": "Live vom Dorfplatz"
+  }
+}

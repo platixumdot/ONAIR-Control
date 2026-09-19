@@ -1,0 +1,5 @@
+import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url'; import type { AppState } from './types.js';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'); const file = path.join(root, 'data', 'state.json');
+const initial: AppState = { version: 2, obs: { url: process.env.OBS_URL || 'ws://127.0.0.1:4455', password: process.env.OBS_PASSWORD || '' }, branding: { primary: '#8059ff', accent: '#3ee1b7', show: '' }, people: [], lowerThird: null, lowerThirdVisible: false, countdown: { endsAt: null, visible: false, title: 'STREAM STARTS IN' }, hotkeys: { F1: '', F2: '', F3: '', F4: '', F5: '' } };
+export function loadState(): AppState { try { const saved = JSON.parse(fs.readFileSync(file, 'utf-8')); return saved.version === 2 ? { ...initial, ...saved, obs: { ...initial.obs, ...saved.obs }, branding: { ...initial.branding, ...saved.branding } } : initial; } catch { return initial; } }
+export function saveState(state: AppState) { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, JSON.stringify(state, null, 2)); }
