@@ -44,13 +44,40 @@ export class ObsControl {
   async toggleInputMute(inputName: string) { this.ensure(); const source = this.runtime.inputSources.find(i => i.name === inputName); if (!source) return; await this.setInputMute(inputName, !source.muted); }
   async createScene(name: string) { this.ensure(); await this.obs.call('CreateScene', { sceneName: name }); await this.refresh(); }
   async addBrowserSource(sceneName: string, inputName: string, url: string, width: number, height: number, rerouteAudio = false) {
-    this.ensure(); const inputSettings = { url, width, height, shutdown: false, reroute_audio: rerouteAudio };
-    try { await this.obs.call('CreateInput', { sceneName, inputName, inputKind: 'browser_source', inputSettings, sceneItemEnabled: true }); }
-    catch (error) {
-      const message = error instanceof Error ? error.message : ''; if (!message.includes('already exists')) throw error;
+    this.ensure();
+    const inputSettings = { url, width, height, shutdown: false, reroute_audio: rerouteAudio };
+    const inputs = await this.obs.call('GetInputList') as { inputs: { inputName: string; inputKind: string }[] };
+    const existingInput = inputs.inputs.find((input) => input.inputName === inputName);
+
+    if (existingInput && existingInput.inputKind !== 'browser_source') {
+      throw new Error(`OBS-Quelle „${inputName}“ existiert bereits, ist aber keine Browser-Quelle.`);
+    }
+
+    if (existingInput) {
       await this.obs.call('SetInputSettings', { inputName, inputSettings, overlay: false });
-      try { await this.obs.call('GetSceneItemId', { sceneName, sourceName: inputName }); }
-      catch { await this.obs.call('CreateSceneItem', { sceneName, sourceName: inputName, sceneItemEnabled: true }); }
+    } else {
+      await this.obs.call('CreateInput', {
+        sceneName,
+        inputName,
+        inputKind: 'browser_source',
+        inputSettings,
+        sceneItemEnabled: true,
+      });
+      return;
+    }
+
+    const scene = await this.obs.call('GetSceneItemList', { sceneName }) as {
+      sceneItems: { sourceName: string; sceneItemId: number }[];
+    };
+    const sceneItem = scene.sceneItems.find((item) => item.sourceName === inputName);
+    if (sceneItem) {
+      await this.obs.call('SetSceneItemEnabled', {
+        sceneName,
+        sceneItemId: sceneItem.sceneItemId,
+        sceneItemEnabled: true,
+      });
+    } else {
+      await this.obs.call('CreateSceneItem', { sceneName, sourceName: inputName, sceneItemEnabled: true });
     }
   }
   async music(inputName: string, action: 'PLAY_PAUSE' | 'RESTART' | 'STOP') { this.ensure(); await this.obs.call('TriggerMediaInputAction', { inputName, mediaAction: `OBS_WEBSOCKET_MEDIA_INPUT_ACTION_${action}` }); }
