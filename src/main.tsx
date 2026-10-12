@@ -325,11 +325,21 @@ function Live({ d }: { d: Feed }) {
   const [sourceError, setSourceError] = useState('');
   const [sourceNotice, setSourceNotice] = useState('');
   const [addingSource, setAddingSource] = useState(false);
+  const activeScene = r.studioMode ? r.preview || r.program : r.program;
+  const sceneListKey = r.scenes.map((item) => item.name).join('\0');
+  const lastActiveScene = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!targetScene && r.scenes[0]) setTargetScene(r.scenes[0].name);
-    else if (targetScene && !r.scenes.some((item) => item.name === targetScene)) setTargetScene(r.scenes[0]?.name || '');
-  }, [r.scenes, targetScene]);
+    const activeSceneChanged = lastActiveScene.current !== activeScene;
+    lastActiveScene.current = activeScene;
+    if (activeScene && activeSceneChanged) {
+      setTargetScene(activeScene);
+      return;
+    }
+    setTargetScene((current) =>
+      r.scenes.some((item) => item.name === current) ? current : activeScene || r.scenes[0]?.name || ''
+    );
+  }, [activeScene, sceneListKey]);
 
   const act = (a: string, p?: object) => api(a, p);
   const setProgramScene = (sceneName: string) => act('program', { scene: sceneName });
@@ -431,12 +441,24 @@ function Live({ d }: { d: Feed }) {
           <Text fw={700}>OBS Browser Sources</Text>
           <Select
             mt="sm"
-            label="Zielszene"
+            label="Szene, in die eingefügt wird"
             data={r.scenes.map((item) => item.name)}
             value={targetScene || null}
             onChange={(value) => setTargetScene(value || '')}
             placeholder="OBS-Szene auswählen"
           />
+          <Text size="xs" c="dimmed" mt={4}>
+            Aktuelle OBS-Szene: {activeScene || 'Keine aktive Szene'}
+          </Text>
+          <Button
+            mt="xs"
+            size="xs"
+            variant="subtle"
+            disabled={!activeScene}
+            onClick={() => activeScene && setTargetScene(activeScene)}
+          >
+            Aktuelle OBS-Szene als Ziel verwenden
+          </Button>
           <Select
             mt="sm"
             label="Quelle"
