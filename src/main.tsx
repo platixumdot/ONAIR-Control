@@ -268,7 +268,14 @@ function PhoneCameraSource({ cameraId }: { cameraId: string }) {
   return (
     <div className="phone-camera-source">
       <video ref={video} autoPlay playsInline />
-      {!hasSignal && <div className="phone-camera-no-signal"><span>KEIN SIGNAL</span></div>}
+      {!hasSignal && (
+        <div className="phone-camera-no-signal" role="status" aria-label="No signal">
+          <div className="phone-camera-test-bars" />
+          <div className="phone-camera-static" />
+          <div className="phone-camera-static-band" />
+          <span>NO SIGNAL</span>
+        </div>
+      )}
     </div>
   );
 }
