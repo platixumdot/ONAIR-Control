@@ -25,7 +25,7 @@ npm install
 Entwicklungsserver starten:
 
 ```powershell
-npm run dev
+npm run dev -- --host
 ```
 
 Anschließend ist die Anwendung unter [http://localhost:5173](http://localhost:5173) erreichbar.
@@ -70,6 +70,27 @@ ONAir Control benötigt **OBS Studio 28 oder neuer** und eine aktive OBS-WebSock
 Nach erfolgreicher Verbindung werden die vorhandenen OBS-Szenen automatisch im Control Center angezeigt.
 
 Szenenwechsel sowie die Steuerung von Stream und Aufnahme werden anschließend direkt an OBS übertragen.
+
+---
+
+## Android-Handykamera
+
+Das Control Center kann Android-Smartphones im selben lokalen Netzwerk als Live-Kameraquelle verwenden. Das Android-Projekt liegt unter [`android-camera`](./android-camera).
+
+### App bauen und koppeln
+
+1. `android-camera` in Android Studio öffnen und das Projekt synchronisieren.
+2. Über **Build → Build APK(s)** oder in PowerShell mit `.\gradlew.bat assembleDebug` (im Ordner `android-camera`) die App bauen und auf dem Android-Smartphone installieren. Die Debug-APK liegt danach unter `android-camera/app/build/outputs/apk/debug/app-debug.apk`.
+3. Im Control Center unter **Live Production → Handykameras (Android)** einen Kameranamen eingeben und **Kamera koppeln** wählen.
+4. In der Android-App **Mit QR-Code koppeln** antippen und den angezeigten QR-Code scannen.
+5. Kamera- und Mikrofonzugriff erlauben. Das Smartphone überträgt Bild und Ton, sobald eine OBS-Quelle für diese Kamera geöffnet wird.
+6. Im Control Center eine Szene auswählen und **OBS-Quelle hinzufügen** anklicken. Die Browser-Quelle zeigt **KEIN SIGNAL**, solange keine Verbindung bzw. kein Kamerabild anliegt.
+
+Die Verbindung nutzt WebRTC direkt zwischen Android-App und OBS-Browser-Quelle; ein TURN-Server oder Internetzugang ist im gleichen LAN nicht nötig. Der Android-Build benötigt Android SDK 34 und unterstützt Geräte ab Android 8 (API 26). Die App fordert 1080p/60 fps mit einer maximalen Video-Bitrate von 12 Mbit/s an und überträgt außerdem das Smartphone-Mikrofon. Ob ein Gerät 1080p/60 fps erreicht, hängt von den Kameraformaten, dem Hardware-Encoder und dem WLAN ab; bei Engpässen kann die tatsächliche Bildrate oder Qualität geringer sein.
+
+Für den OBS-Ton wird die Audioausgabe der Browser-Quelle in OBS umgeleitet. Kontrolliere nach dem Anlegen der Quelle den OBS-Audiomixer und stelle sicher, dass diese Quelle nicht stummgeschaltet ist.
+
+Öffne das Control Center auf dem Produktionsrechner über dessen LAN-IP-Adresse oder Hostnamen (nicht `localhost`), damit der QR-Code für das Smartphone erreichbar ist. Kontrolliere vor dem Koppeln das Feld **Server-IP oder Hostname für das Smartphone**: Steht dort `localhost`, trage stattdessen die LAN-IP des Rechners ein und erzeuge bzw. erneuere den QR-Code. Die App zeigt bei Verbindungsproblemen jetzt Serveradresse und Netzwerkhinweis an. Der QR-Code enthält ein geheimes Kopplungstoken. Er darf nur auf dem eigenen lokalen Netzwerk verwendet und nicht weitergegeben werden. Mit **QR-Code erneuern** wird ein neuer Code erzeugt; der vorherige Code wird dadurch ungültig. Kamera-App und Produktionsrechner müssen sich im selben Netzwerk befinden. Bei Windows muss der Zugriff auf den ONAIR-Control-Port (standardmäßig TCP 3010) im lokalen Netzwerk erlaubt sein.
 
 ---
 

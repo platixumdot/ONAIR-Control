@@ -217,6 +217,23 @@ nav .nav-on{
 .lower-third small{font:9px var(--mono);color:var(--ink-dim);margin-top:2px;letter-spacing:.6px}
 @keyframes enter{from{transform:translateX(-110%);opacity:0}to{transform:none;opacity:1}}
 
+.phone-camera-source{
+  position:fixed;inset:0;background:#000;display:grid;place-items:center;
+  overflow:hidden;color:#fff;font-family:Manrope,Arial,sans-serif;
+}
+.phone-camera-source video{
+  width:100%;height:100%;object-fit:contain;background:#000;
+}
+.phone-camera-no-signal{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:#000;color:#d8d8d8;
+}
+.phone-camera-no-signal span{
+  border:1px solid #555;padding:14px 20px;
+  font:500 18px var(--mono);letter-spacing:3px;
+}
+.phone-camera-row{border:1px solid var(--line);border-radius:var(--r)}
+
 /* ============ status panel ============ */
 .status{
   background:var(--panel);

@@ -43,8 +43,8 @@ export class ObsControl {
   async setInputMute(inputName: string, muted: boolean) { this.ensure(); await this.obs.call('SetInputMute', { inputName, inputMuted: muted }); await this.refresh(); }
   async toggleInputMute(inputName: string) { this.ensure(); const source = this.runtime.inputSources.find(i => i.name === inputName); if (!source) return; await this.setInputMute(inputName, !source.muted); }
   async createScene(name: string) { this.ensure(); await this.obs.call('CreateScene', { sceneName: name }); await this.refresh(); }
-  async addBrowserSource(sceneName: string, inputName: string, url: string, width: number, height: number) {
-    this.ensure(); const inputSettings = { url, width, height, shutdown: false, reroute_audio: false };
+  async addBrowserSource(sceneName: string, inputName: string, url: string, width: number, height: number, rerouteAudio = false) {
+    this.ensure(); const inputSettings = { url, width, height, shutdown: false, reroute_audio: rerouteAudio };
     try { await this.obs.call('CreateInput', { sceneName, inputName, inputKind: 'browser_source', inputSettings, sceneItemEnabled: true }); }
     catch (error) {
       const message = error instanceof Error ? error.message : ''; if (!message.includes('already exists')) throw error;

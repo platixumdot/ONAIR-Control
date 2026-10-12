@@ -18,6 +18,7 @@ import {
   Divider,
   ActionIcon,
   ThemeIcon,
+  Modal,
 } from '@mantine/core';
 import {
   IconBroadcast,
@@ -28,13 +29,17 @@ import {
   IconPlayerStop,
   IconTrash,
   IconLayoutGrid,
+  IconDeviceMobile,
+  IconQrcode,
 } from '@tabler/icons-react';
+import QRCode from 'qrcode';
 import '@mantine/core/styles.css';
 import './styles.css';
 import { getSceneBadgeState } from './sceneState';
 
 type Person = { id: string; name: string; role: string; company?: string; color: string; initials: string };
 type InputSource = { name: string; kind: string; muted: boolean };
+type PhoneCamera = { id: string; name: string; connected: boolean };
 type State = {
   obs: { url: string; password: string };
   branding: { primary: string; show: string };
@@ -56,7 +61,7 @@ type Runtime = {
   studioMode: boolean;
   lastError: string | null;
 };
-type Feed = { state: State; runtime: Runtime; s: State };
+type Feed = { state: State; runtime: Runtime; s: State; phoneCameras: PhoneCamera[] };
 type Banner = { visible: boolean; headline: string; detail: string };
 
 const api = async (action: string, payload: object = {}) => {
@@ -83,10 +88,12 @@ function useFeed() {
       .then((r) => r.json())
       .then(normalize);
 
-    const wsUrl = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:3010/ws`;
-    const w = new WebSocket(wsUrl);
-    w.onmessage = (event) => normalize(JSON.parse(event.data));
-    return () => w.close();
+    const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new WebSocket(`${protocol}://${location.host}/ws`);
+    socket.onmessage = (event) => normalize(JSON.parse(event.data));
+    return () => {
+      socket.close();
+    };
   }, []);
 
   return d;
@@ -177,6 +184,102 @@ function Overlay() {
   );
 }
 
+function PhoneCameraSource({ cameraId }: { cameraId: string }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [hasSignal, setHasSignal] = useState(false);
+
+  useEffect(() => {
+    let stopped = false;
+    let socket: WebSocket | null = null;
+    let peer: RTCPeerConnection | null = null;
+    let reconnectTimer: number | undefined;
+    let pendingCandidates: RTCIceCandidateInit[] = [];
+
+    const closePeer = () => {
+      peer?.close();
+      peer = null;
+      pendingCandidates = [];
+      if (video.current) video.current.srcObject = null;
+      setHasSignal(false);
+    };
+
+    const connect = async () => {
+      try {
+        const configResponse = await fetch(`/api/config?scheme=${encodeURIComponent(location.protocol)}`);
+        if (!configResponse.ok) throw new Error('Signalisierungsserver nicht erreichbar.');
+        const { signalingUrl } = await configResponse.json() as { signalingUrl: string };
+        if (stopped) return;
+
+        const currentSocket = new WebSocket(`${signalingUrl}?role=viewer&session=${encodeURIComponent(cameraId)}`);
+        socket = currentSocket;
+        currentSocket.onopen = () => currentSocket.send(JSON.stringify({ type: 'viewer-ready' }));
+        currentSocket.onmessage = async (event) => {
+          const message = JSON.parse(event.data);
+          if (message.type === 'peer-disconnected') {
+            closePeer();
+            return;
+          }
+          if (message.type === 'offer') {
+            peer?.close();
+            peer = null;
+            if (video.current) video.current.srcObject = null;
+            setHasSignal(false);
+            const connection = new RTCPeerConnection({ iceServers: [] });
+            peer = connection;
+            connection.ontrack = (trackEvent) => {
+              const stream = trackEvent.streams[0] || new MediaStream([trackEvent.track]);
+              if (video.current) video.current.srcObject = stream;
+              setHasSignal(true);
+            };
+            connection.onicecandidate = (candidateEvent) => {
+              if (candidateEvent.candidate && currentSocket.readyState === WebSocket.OPEN) {
+                currentSocket.send(JSON.stringify({ type: 'candidate', candidate: candidateEvent.candidate }));
+              }
+            };
+            connection.onconnectionstatechange = () => {
+              if (connection.connectionState === 'failed' || connection.connectionState === 'disconnected' || connection.connectionState === 'closed') {
+                setHasSignal(false);
+              }
+            };
+            await connection.setRemoteDescription(message.description);
+            for (const candidate of pendingCandidates) await connection.addIceCandidate(candidate);
+            pendingCandidates = [];
+            const answer = await connection.createAnswer();
+            await connection.setLocalDescription(answer);
+            currentSocket.send(JSON.stringify({ type: 'answer', description: connection.localDescription }));
+          } else if (message.type === 'candidate' && message.candidate) {
+            if (peer?.remoteDescription) await peer.addIceCandidate(message.candidate);
+            else pendingCandidates.push(message.candidate);
+          }
+        };
+        currentSocket.onclose = () => {
+          if (socket === currentSocket) socket = null;
+          closePeer();
+          if (!stopped) reconnectTimer = window.setTimeout(connect, 2000);
+        };
+        currentSocket.onerror = () => currentSocket.close();
+      } catch {
+        if (!stopped) reconnectTimer = window.setTimeout(connect, 2000);
+      }
+    };
+
+    void connect();
+    return () => {
+      stopped = true;
+      window.clearTimeout(reconnectTimer);
+      socket?.close();
+      closePeer();
+    };
+  }, [cameraId]);
+
+  return (
+    <div className="phone-camera-source">
+      <video ref={video} autoPlay playsInline />
+      {!hasSignal && <div className="phone-camera-no-signal"><span>KEIN SIGNAL</span></div>}
+    </div>
+  );
+}
+
 function App() {
   const d = useFeed();
   const [page, setPage] = useState<'live' | 'people' | 'settings'>('live');
@@ -224,16 +327,35 @@ function App() {
 
 function Live({ d }: { d: Feed }) {
   const { state: s, runtime: r } = d;
-  const [scene, setScene] = useState('');
+  const [targetScene, setTargetScene] = useState('');
+  const [sourceKind, setSourceKind] = useState<string | null>(null);
+  const [sourceError, setSourceError] = useState('');
+  const [addingSource, setAddingSource] = useState(false);
 
   useEffect(() => {
-    if (!scene && r.scenes[0]) setScene(r.scenes[0].name);
-  }, [r.scenes, scene]);
+    if (!targetScene && r.scenes[0]) setTargetScene(r.scenes[0].name);
+    else if (targetScene && !r.scenes.some((item) => item.name === targetScene)) setTargetScene(r.scenes[0]?.name || '');
+  }, [r.scenes, targetScene]);
 
   const act = (a: string, p?: object) => api(a, p);
   const setProgramScene = (sceneName: string) => act('program', { scene: sceneName });
   const setPreviewScene = (sceneName: string) => act('preview', { scene: sceneName });
   const takeScene = () => act('take');
+  const addBrowserSource = async () => {
+    if (!targetScene || !sourceKind) {
+      setSourceError('Bitte zuerst eine Zielszene und eine Quelle auswählen.');
+      return;
+    }
+    setAddingSource(true);
+    setSourceError('');
+    try {
+      await api('addBrowserSource', { scene: targetScene, kind: sourceKind });
+    } catch (error) {
+      setSourceError(error instanceof Error ? error.message : 'Browser-Quelle konnte nicht hinzugefügt werden.');
+    } finally {
+      setAddingSource(false);
+    }
+  };
 
   return (
     <Stack className="dashboard" gap="lg">
@@ -313,23 +435,168 @@ function Live({ d }: { d: Feed }) {
           <Text fw={700}>OBS Browser Sources</Text>
           <Select
             mt="sm"
-            data={['countdown', 'info-banner', 'lower-third']}
-            value={scene}
-            onChange={(v) => setScene(v || '')}
-            placeholder="Quelle auswählen"
+            label="Zielszene"
+            data={r.scenes.map((item) => item.name)}
+            value={targetScene || null}
+            onChange={(value) => setTargetScene(value || '')}
+            placeholder="OBS-Szene auswählen"
           />
-          <Button mt="sm" fullWidth onClick={() => api('addBrowserSource', { scene, kind: 'countdown' })}>
+          <Select
+            mt="sm"
+            label="Quelle"
+            data={[
+              { value: 'countdown', label: 'Starting Soon' },
+              { value: 'info-banner', label: 'Info Banner' },
+              { value: 'lower-third', label: 'Lower Third' },
+            ]}
+            value={sourceKind}
+            onChange={setSourceKind}
+            placeholder="Browser-Quelle auswählen"
+          />
+          <Button mt="sm" fullWidth loading={addingSource} disabled={!targetScene || !sourceKind || !r.connected} onClick={addBrowserSource}>
             Browser-Source anlegen
           </Button>
-          <Button mt="xs" variant="default" fullWidth onClick={() => api('addBrowserSource', { scene, kind: 'info-banner' })}>
-            Info Banner hinzufügen
-          </Button>
-          <Button mt="xs" variant="default" fullWidth onClick={() => api('addBrowserSource', { scene, kind: 'lower-third' })}>
-            Lower Third hinzufügen
-          </Button>
+          {sourceError && <Text c="red" size="sm" mt="xs">{sourceError}</Text>}
         </Paper>
       </SimpleGrid>
+      <PhoneCamerasPanel cameras={d.phoneCameras} scene={targetScene} connected={r.connected} />
     </Stack>
+  );
+}
+
+function PhoneCamerasPanel({ cameras, scene, connected }: { cameras: PhoneCamera[]; scene: string; connected: boolean }) {
+  const [name, setName] = useState('');
+  const [serverHost, setServerHost] = useState(location.hostname);
+  const [pairing, setPairing] = useState<{ camera: Pick<PhoneCamera, 'id' | 'name'>; qr: string } | null>(null);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [addingCameraId, setAddingCameraId] = useState<string | null>(null);
+
+  const showPairing = async (path: string, method: 'POST', payload: object): Promise<boolean> => {
+    setBusy(true);
+    setError('');
+    try {
+      const response = await fetch(path, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, host: serverHost.trim(), scheme: location.protocol }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'QR-Code konnte nicht erstellt werden.');
+      const qr = await QRCode.toDataURL(result.pairingUrl, { width: 300, margin: 2 });
+      setPairing({ camera: result.camera, qr });
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'QR-Code konnte nicht erstellt werden.');
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const createCamera = async () => {
+    if (!name.trim()) {
+      setError('Bitte einen Namen für die Handykamera eingeben.');
+      return;
+    }
+    if (await showPairing('/api/phone-cameras', 'POST', { name: name.trim() })) setName('');
+  };
+
+  const addCameraSource = async (camera: PhoneCamera) => {
+    setAddingCameraId(camera.id);
+    setError('');
+    try {
+      await api('addPhoneCameraSource', { cameraId: camera.id, scene, baseUrl: location.origin });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Handykamera-Quelle konnte nicht hinzugefügt werden.');
+    } finally {
+      setAddingCameraId(null);
+    }
+  };
+
+  return (
+    <>
+      <Paper p="lg" withBorder>
+        <Group justify="space-between" mb="sm">
+          <Group gap="xs">
+            <IconDeviceMobile size={19} />
+            <Text fw={700}>Handykameras (Android)</Text>
+          </Group>
+          <Badge color="gray" variant="light">Gleiches WLAN/LAN erforderlich</Badge>
+        </Group>
+        <Text size="sm" c="dimmed" mb="md">
+          Kamera per QR-Code mit der Android-App koppeln und als OBS-Quelle verwenden.
+        </Text>
+        <TextInput
+          label="Server-IP oder Hostname für das Smartphone"
+          placeholder="z. B. 192.168.1.25"
+          value={serverHost}
+          onChange={(event) => setServerHost(event.currentTarget.value)}
+          mb="sm"
+        />
+        {(serverHost === 'localhost' || serverHost === '127.0.0.1') && (
+          <Text c="yellow" size="sm" mb="sm">
+            „{serverHost}“ funktioniert auf dem Handy nicht: Trage hier die LAN-IP des Rechners ein, auf dem ONAIR Control läuft.
+          </Text>
+        )}
+        <Group align="end">
+          <TextInput
+            label="Kameraname"
+            placeholder="z. B. Smartphone Bühne"
+            value={name}
+            maxLength={60}
+            onChange={(event) => setName(event.currentTarget.value)}
+            style={{ flex: 1 }}
+          />
+          <Button leftSection={<IconQrcode size={16} />} loading={busy} onClick={createCamera}>
+            Kamera koppeln
+          </Button>
+        </Group>
+        {error && <Text c="red" size="sm" mt="xs">{error}</Text>}
+        {cameras.length > 0 && (
+          <Stack gap="xs" mt="md">
+            {cameras.map((camera) => (
+              <Group key={camera.id} justify="space-between" p="xs" className="phone-camera-row">
+                <Group gap="xs">
+                  <Text size="sm" fw={600}>{camera.name}</Text>
+                  <Badge color={camera.connected ? 'teal' : 'gray'}>{camera.connected ? 'Verbunden' : 'Offline'}</Badge>
+                </Group>
+                <Group gap="xs">
+                  <Button
+                    size="xs"
+                    variant="default"
+                    leftSection={<IconQrcode size={14} />}
+                    loading={busy}
+                    onClick={() => showPairing(`/api/phone-cameras/${encodeURIComponent(camera.id)}/pairing`, 'POST', {})}
+                  >
+                    QR-Code erneuern
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    disabled={!scene || !connected}
+                    loading={addingCameraId === camera.id}
+                    onClick={() => addCameraSource(camera)}
+                  >
+                    OBS-Quelle hinzufügen
+                  </Button>
+                </Group>
+              </Group>
+            ))}
+          </Stack>
+        )}
+      </Paper>
+
+      <Modal opened={Boolean(pairing)} onClose={() => setPairing(null)} title={`„${pairing?.camera.name || ''}“ koppeln`} centered>
+        {pairing && (
+          <Stack align="center">
+            <img src={pairing.qr} alt={`QR-Code zum Koppeln von ${pairing.camera.name}`} width={300} height={300} />
+            <Text ta="center" size="sm">QR-Code in der ONAIR-Camera-App scannen. Smartphone und Produktionsrechner müssen im selben Netzwerk sein.</Text>
+            <Text ta="center" size="xs" c="dimmed">Ein neuer QR-Code ersetzt den bisherigen Kopplungscode.</Text>
+          </Stack>
+        )}
+      </Modal>
+    </>
   );
 }
 
@@ -615,4 +882,8 @@ function Settings({ s }: { s: State }) {
   );
 }
 
-createRoot(document.getElementById('root')!).render(location.pathname.startsWith('/overlay/') ? <Overlay /> : <App />);
+const phoneCameraMatch = location.pathname.match(/^\/phone-camera\/([^/]+)$/);
+createRoot(document.getElementById('root')!).render(
+  phoneCameraMatch ? <PhoneCameraSource cameraId={decodeURIComponent(phoneCameraMatch[1])} /> :
+    location.pathname.startsWith('/overlay/') ? <Overlay /> : <App />
+);

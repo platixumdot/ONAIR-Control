@@ -1,11 +1,11 @@
 {
   "name": "onair-control",
-  "version": "0.1.0",
+  "version": "0.6.6-alpha",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
-    "dev:client": "vite --host",
+    "dev:client": "wait-on tcp:3010 && vite --host",
     "dev:server": "tsx watch server/index.ts",
     "build": "tsc -b && vite build",
     "start": "tsx server/index.ts",
@@ -21,6 +21,7 @@
     "dotenv": "latest",
     "express": "latest",
     "obs-websocket-js": "latest",
+    "qrcode": "^1.5.4",
     "react": "latest",
     "react-dom": "latest",
     "rxjs": "7.8.2",
@@ -32,12 +33,14 @@
     "@types/cors": "latest",
     "@types/express": "latest",
     "@types/node": "latest",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/ws": "latest",
     "concurrently": "latest",
     "typescript": "latest",
     "vite": "latest",
-    "vitest": "latest"
+    "vitest": "latest",
+    "wait-on": "^9.5.1"
   }
 }
