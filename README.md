@@ -83,10 +83,12 @@ Das Control Center kann Android-Smartphones im selben lokalen Netzwerk als Live-
 2. Über **Build → Build APK(s)** oder in PowerShell mit `.\gradlew.bat assembleDebug` (im Ordner `android-camera`) die App bauen und auf dem Android-Smartphone installieren. Die Debug-APK liegt danach unter `android-camera/app/build/outputs/apk/debug/app-debug.apk`.
 3. Im Control Center unter **Live Production → Handykameras (Android)** einen Kameranamen eingeben und **Kamera koppeln** wählen.
 4. In der Android-App **Mit QR-Code koppeln** antippen und den angezeigten QR-Code scannen.
-5. Kamera- und Mikrofonzugriff erlauben. Das Smartphone überträgt Bild und Ton, sobald eine OBS-Quelle für diese Kamera geöffnet wird.
+5. Das Smartphone quer halten und Kamera- sowie Mikrofonzugriff erlauben. Die App ist auf Querformat eingestellt und überträgt Bild und Ton, sobald eine OBS-Quelle für diese Kamera geöffnet wird.
 6. Im Control Center eine Szene auswählen und **OBS-Quelle hinzufügen** anklicken. Die Browser-Quelle zeigt **KEIN SIGNAL**, solange keine Verbindung bzw. kein Kamerabild anliegt.
 
-Die Verbindung nutzt WebRTC direkt zwischen Android-App und OBS-Browser-Quelle; ein TURN-Server oder Internetzugang ist im gleichen LAN nicht nötig. Der Android-Build benötigt Android SDK 34 und unterstützt Geräte ab Android 8 (API 26). Die App fordert 1080p/60 fps mit einer maximalen Video-Bitrate von 12 Mbit/s an und überträgt außerdem das Smartphone-Mikrofon. Ob ein Gerät 1080p/60 fps erreicht, hängt von den Kameraformaten, dem Hardware-Encoder und dem WLAN ab; bei Engpässen kann die tatsächliche Bildrate oder Qualität geringer sein.
+Die Verbindung nutzt WebRTC direkt zwischen Android-App und OBS-Browser-Quelle; ein TURN-Server oder Internetzugang ist im gleichen LAN nicht nötig. Der Android-Build benötigt Android SDK 34 und unterstützt Geräte ab Android 8 (API 26). Die App läuft im Querformat, fordert 1080p/60 fps mit einer maximalen Video-Bitrate von 12 Mbit/s an und überträgt außerdem das Smartphone-Mikrofon. Ob ein Gerät 1080p/60 fps erreicht, hängt von den Kameraformaten, dem Hardware-Encoder und dem WLAN ab; bei Engpässen kann die tatsächliche Bildrate oder Qualität geringer sein.
+
+Beim Anlegen einer Browser- oder Handykamera-Quelle wird standardmäßig die aktuelle Live-Szene (im Studio-Modus die Vorschau-Szene) als Ziel ausgewählt. Die Zielszene lässt sich vor dem Anlegen weiterhin im Feld **Szene, in die eingefügt wird** kontrollieren und ändern.
 
 Für den OBS-Ton wird die Audioausgabe der Browser-Quelle in OBS umgeleitet. Kontrolliere nach dem Anlegen der Quelle den OBS-Audiomixer und stelle sicher, dass diese Quelle nicht stummgeschaltet ist.
 
