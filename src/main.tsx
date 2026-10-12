@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   MantineProvider,
@@ -203,64 +203,57 @@ function PhoneCameraSource({ cameraId }: { cameraId: string }) {
       setHasSignal(false);
     };
 
-    const connect = async () => {
-      try {
-        const configResponse = await fetch(`/api/config?scheme=${encodeURIComponent(location.protocol)}`);
-        if (!configResponse.ok) throw new Error('Signalisierungsserver nicht erreichbar.');
-        const { signalingUrl } = await configResponse.json() as { signalingUrl: string };
-        if (stopped) return;
-
-        const currentSocket = new WebSocket(`${signalingUrl}?role=viewer&session=${encodeURIComponent(cameraId)}`);
-        socket = currentSocket;
-        currentSocket.onopen = () => currentSocket.send(JSON.stringify({ type: 'viewer-ready' }));
-        currentSocket.onmessage = async (event) => {
-          const message = JSON.parse(event.data);
-          if (message.type === 'peer-disconnected') {
-            closePeer();
-            return;
-          }
-          if (message.type === 'offer') {
-            peer?.close();
-            peer = null;
-            if (video.current) video.current.srcObject = null;
-            setHasSignal(false);
-            const connection = new RTCPeerConnection({ iceServers: [] });
-            peer = connection;
-            connection.ontrack = (trackEvent) => {
-              const stream = trackEvent.streams[0] || new MediaStream([trackEvent.track]);
-              if (video.current) video.current.srcObject = stream;
-              setHasSignal(true);
-            };
-            connection.onicecandidate = (candidateEvent) => {
-              if (candidateEvent.candidate && currentSocket.readyState === WebSocket.OPEN) {
-                currentSocket.send(JSON.stringify({ type: 'candidate', candidate: candidateEvent.candidate }));
-              }
-            };
-            connection.onconnectionstatechange = () => {
-              if (connection.connectionState === 'failed' || connection.connectionState === 'disconnected' || connection.connectionState === 'closed') {
-                setHasSignal(false);
-              }
-            };
-            await connection.setRemoteDescription(message.description);
-            for (const candidate of pendingCandidates) await connection.addIceCandidate(candidate);
-            pendingCandidates = [];
-            const answer = await connection.createAnswer();
-            await connection.setLocalDescription(answer);
-            currentSocket.send(JSON.stringify({ type: 'answer', description: connection.localDescription }));
-          } else if (message.type === 'candidate' && message.candidate) {
-            if (peer?.remoteDescription) await peer.addIceCandidate(message.candidate);
-            else pendingCandidates.push(message.candidate);
-          }
-        };
-        currentSocket.onclose = () => {
-          if (socket === currentSocket) socket = null;
+    const connect = () => {
+      if (stopped) return;
+      const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+      const currentSocket = new WebSocket(`${protocol}://${location.host}/ws?role=viewer&session=${encodeURIComponent(cameraId)}`);
+      socket = currentSocket;
+      currentSocket.onopen = () => currentSocket.send(JSON.stringify({ type: 'viewer-ready' }));
+      currentSocket.onmessage = async (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'peer-disconnected') {
           closePeer();
-          if (!stopped) reconnectTimer = window.setTimeout(connect, 2000);
-        };
-        currentSocket.onerror = () => currentSocket.close();
-      } catch {
+          return;
+        }
+        if (message.type === 'offer') {
+          peer?.close();
+          peer = null;
+          if (video.current) video.current.srcObject = null;
+          setHasSignal(false);
+          const connection = new RTCPeerConnection({ iceServers: [] });
+          peer = connection;
+          connection.ontrack = (trackEvent) => {
+            const stream = trackEvent.streams[0] || new MediaStream([trackEvent.track]);
+            if (video.current) video.current.srcObject = stream;
+            setHasSignal(true);
+          };
+          connection.onicecandidate = (candidateEvent) => {
+            if (candidateEvent.candidate && currentSocket.readyState === WebSocket.OPEN) {
+              currentSocket.send(JSON.stringify({ type: 'candidate', candidate: candidateEvent.candidate }));
+            }
+          };
+          connection.onconnectionstatechange = () => {
+            if (connection.connectionState === 'failed' || connection.connectionState === 'disconnected' || connection.connectionState === 'closed') {
+              setHasSignal(false);
+            }
+          };
+          await connection.setRemoteDescription(message.description);
+          for (const candidate of pendingCandidates) await connection.addIceCandidate(candidate);
+          pendingCandidates = [];
+          const answer = await connection.createAnswer();
+          await connection.setLocalDescription(answer);
+          currentSocket.send(JSON.stringify({ type: 'answer', description: connection.localDescription }));
+        } else if (message.type === 'candidate' && message.candidate) {
+          if (peer?.remoteDescription) await peer.addIceCandidate(message.candidate);
+          else pendingCandidates.push(message.candidate);
+        }
+      };
+      currentSocket.onclose = () => {
+        if (socket === currentSocket) socket = null;
+        closePeer();
         if (!stopped) reconnectTimer = window.setTimeout(connect, 2000);
-      }
+      };
+      currentSocket.onerror = () => currentSocket.close();
     };
 
     void connect();
@@ -330,6 +323,7 @@ function Live({ d }: { d: Feed }) {
   const [targetScene, setTargetScene] = useState('');
   const [sourceKind, setSourceKind] = useState<string | null>(null);
   const [sourceError, setSourceError] = useState('');
+  const [sourceNotice, setSourceNotice] = useState('');
   const [addingSource, setAddingSource] = useState(false);
 
   useEffect(() => {
@@ -348,8 +342,10 @@ function Live({ d }: { d: Feed }) {
     }
     setAddingSource(true);
     setSourceError('');
+    setSourceNotice('');
     try {
       await api('addBrowserSource', { scene: targetScene, kind: sourceKind });
+      setSourceNotice(`Browser-Quelle wurde der Szene „${targetScene}“ hinzugefügt bzw. aktiviert.`);
     } catch (error) {
       setSourceError(error instanceof Error ? error.message : 'Browser-Quelle konnte nicht hinzugefügt werden.');
     } finally {
@@ -457,6 +453,7 @@ function Live({ d }: { d: Feed }) {
             Browser-Source anlegen
           </Button>
           {sourceError && <Text c="red" size="sm" mt="xs">{sourceError}</Text>}
+          {sourceNotice && <Text c="teal" size="sm" mt="xs">{sourceNotice}</Text>}
         </Paper>
       </SimpleGrid>
       <PhoneCamerasPanel cameras={d.phoneCameras} scene={targetScene} connected={r.connected} />
@@ -469,6 +466,7 @@ function PhoneCamerasPanel({ cameras, scene, connected }: { cameras: PhoneCamera
   const [serverHost, setServerHost] = useState(location.hostname);
   const [pairing, setPairing] = useState<{ camera: Pick<PhoneCamera, 'id' | 'name'>; qr: string } | null>(null);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
   const [addingCameraId, setAddingCameraId] = useState<string | null>(null);
 
@@ -505,8 +503,10 @@ function PhoneCamerasPanel({ cameras, scene, connected }: { cameras: PhoneCamera
   const addCameraSource = async (camera: PhoneCamera) => {
     setAddingCameraId(camera.id);
     setError('');
+    setNotice('');
     try {
       await api('addPhoneCameraSource', { cameraId: camera.id, scene, baseUrl: location.origin });
+      setNotice(`Handykamera wurde der Szene „${scene}“ hinzugefügt bzw. aktiviert.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Handykamera-Quelle konnte nicht hinzugefügt werden.');
     } finally {
@@ -553,6 +553,7 @@ function PhoneCamerasPanel({ cameras, scene, connected }: { cameras: PhoneCamera
           </Button>
         </Group>
         {error && <Text c="red" size="sm" mt="xs">{error}</Text>}
+        {notice && <Text c="teal" size="sm" mt="xs">{notice}</Text>}
         {cameras.length > 0 && (
           <Stack gap="xs" mt="md">
             {cameras.map((camera) => (
