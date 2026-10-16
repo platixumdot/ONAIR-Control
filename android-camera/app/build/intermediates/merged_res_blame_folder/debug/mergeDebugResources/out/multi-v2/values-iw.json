@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "org.onaircontrol.camera.app-mergeDebugResources-19:/values-iw/values-iw.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\NeelH\\.gradle\\caches\\8.8\\transforms\\dd8f0729ba1a7d2854fa97039023bed6\\transformed\\core-1.13.1\\res\\values-iw\\values-iw.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,149,251,348,445,546,646,752",
+                        "endColumns": "93,101,96,96,100,99,105,100",
+                        "endOffsets": "144,246,343,440,541,641,747,848"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\NeelH\\.gradle\\caches\\8.8\\transforms\\6ca42eff92c2dcb7a265ee95243309ec\\transformed\\zxing-android-embedded-4.3.0\\res\\values-iw\\values-iw.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,111,161,296",
+                        "endColumns": "55,49,134,89",
+                        "endOffsets": "106,156,291,381"
+                    },
+                    "to": {
+                        "startLines": "10,11,12,13",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "853,909,959,1094",
+                        "endColumns": "55,49,134,89",
+                        "endOffsets": "904,954,1089,1179"
+                    }
+                }
+            ]
+        }
+    ]
+}

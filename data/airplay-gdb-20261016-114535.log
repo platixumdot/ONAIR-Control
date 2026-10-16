@@ -1,0 +1,836 @@
+[New Thread 31592.0x1d30 (id 2)]
+[New Thread 31592.0xb134 (id 3)]
+[New Thread 31592.0x6184 (id 4)]
+[New Thread 31592.0x970c (id 5)]
+[New Thread 31592.0x78e0 (id 6)]
+[New Thread 31592.0x430 (id 7)]
+[New Thread 31592.0x8e80 (id 8)]
+[New Thread 31592.0x858 (id 9)]
+[New Thread 31592.0x6978 (id 10)]
+[New Thread 31592.0x2fbc (id 11)]
+[New Thread 31592.0x7880 (id 12)]
+[New Thread 31592.0xad08 (id 13)]
+[New Thread 31592.0x6e2c (id 14)]
+[New Thread 31592.0x90b0 (id 15)]
+[New Thread 31592.0x3708 (id 16)]
+[New Thread 31592.0x7620 (id 17)]
+[New Thread 31592.0x6994 (id 18)]
+[New Thread 31592.0x331c (id 19)]
+[New Thread 31592.0x1ac4 (id 20)]
+[New Thread 31592.0x94c4 (id 21)]
+[New Thread 31592.0x5c9c (id 22)]
+[New Thread 31592.0x5ed4 (id 23)]
+[Switching to thread 1 (Thread 31592.0x95a4)]
+0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+[Thread 31592.0x5ed4 (id 23) exited]
+[New Thread 31592.0x93dc (id 24)]
+[New Thread 31592.0x93a8 (id 25)]
+[Thread 31592.0x970c (id 5) exited with code 0]
+[New Thread 31592.0x2438 (id 26)]
+[New Thread 31592.0x6e10 (id 27)]
+[New Thread 31592.0x1b10 (id 28)]
+[New Thread 31592.0x1f84 (id 29)]
+[New Thread 31592.0x917c (id 30)]
+[New Thread 31592.0x6d74 (id 31)]
+[New Thread 31592.0x1f2c (id 32)]
+[New Thread 31592.0x4ef8 (id 33)]
+[New Thread 31592.0x4694 (id 34)]
+[New Thread 31592.0x641c (id 35)]
+[New Thread 31592.0x257c (id 36)]
+[New Thread 31592.0x6864 (id 37)]
+[New Thread 31592.0x4cd8 (id 38)]
+
+Thread 38 received signal SIGSEGV, Segmentation fault.
+[Switching to thread 38 (Thread 31592.0x4cd8)]
+0x00007ff7ad5b5858 in __mingw_vsnprintf ()
+
+Thread 38 (Thread 31592.0x4cd8):
+#0  0x00007ff7ad5b5858 in __mingw_vsnprintf ()
+No symbol table info available.
+#1  0x00007ff7ad5b5718 in __mingw_snprintf ()
+No symbol table info available.
+#2  0x00007ff7ad594604 in utils_data_to_string ()
+No symbol table info available.
+#3  0x00007ff7ad5910e0 in raop_rtp_thread_udp ()
+No symbol table info available.
+#4  0x00007ffa5788766d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#5  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#6  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#7  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#8  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#9  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 37 (Thread 31592.0x6864 "pool-2"):
+#0  0x00007ffa710e4a14 in ntdll!ZwWaitForAlertByThreadId () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa7102298e in ntdll!RtlSleepConditionVariableSRW () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2a58 in SleepConditionVariableSRW () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ff9cf0cd6dc in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#4  0x00007ff9cf056d0d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#5  0x00007ff9cf0573a3 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#6  0x00007ff9cf0cdcee in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#7  0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#8  0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#9  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#10 0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#11 0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#12 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#13 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 36 (Thread 31592.0x257c "NVFBCAsyncThread"):
+#0  0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e1a2773 in WaitForMultipleObjectsEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2641 in WaitForMultipleObjects () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ffa59d26c87 in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa59e00dfa in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#6  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#7  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#8  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 35 (Thread 31592.0x641c):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 34 (Thread 31592.0x4694):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 33 (Thread 31592.0x4ef8):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 32 (Thread 31592.0x1f2c):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 31 (Thread 31592.0x6d74):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 30 (Thread 31592.0x917c):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 29 (Thread 31592.0x1f84 "GstD3D11WindowW"):
+#0  0x00007ffa6ea2aee4 in win32u!NtUserMsgWaitForMultipleObjectsEx () from C:/Windows/System32/win32u.dll
+No symbol table info available.
+#1  0x00007ff9cf0aafdc in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#2  0x00007ff9cf0ab41d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#3  0x00007ff9cf0aba14 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#4  0x00007ff9cf0972ab in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#5  0x00007ff9cf097de0 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#6  0x00007ff9ce082487 in gst_d3d11_window_win32_thread_func (data=0x1f1596a6200) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/sys/d3d11/gstd3d11window_win32.cpp:467
+        window = 0x1f1596a6200
+        self = 0x1f1596a6200
+        source = <optimized out>
+        __FUNCTION__ = "gst_d3d11_window_win32_thread_func"
+#7  0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#8  0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#9  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#10 0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#11 0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#12 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#13 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 28 (Thread 31592.0x1b10):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 27 (Thread 31592.0x6e10):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6d41951a in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#2  0x00007ffa6d4191f2 in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#3  0x00007ffa70ba19b1 in select () from C:/Windows/System32/ws2_32.dll
+No symbol table info available.
+#4  0x00007ff7ad591e1c in raop_rtp_mirror_thread ()
+No symbol table info available.
+#5  0x00007ffa5788766d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#6  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#7  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#8  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#9  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#10 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 26 (Thread 31592.0x2438):
+#0  0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e1a2773 in WaitForMultipleObjectsEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2641 in WaitForMultipleObjects () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ffa57883670 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#4  0x00007ffa5788246a in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#5  0x00007ffa5788272d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#6  0x00007ffa578831b3 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#7  0x00007ff7ad58e684 in raop_ntp_thread ()
+No symbol table info available.
+#8  0x00007ffa5788766d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#9  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#10 0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#11 0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#12 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#13 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 25 (Thread 31592.0x93a8):
+#0  0x00007ffa710e4a74 in ntdll!ZwWaitForWorkViaWorkerFactory () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa70f9a65e in ntdll!TpCallbackMayRunLong () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#3  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#4  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 24 (Thread 31592.0x93dc):
+#0  0x00007ffa710e4a74 in ntdll!ZwWaitForWorkViaWorkerFactory () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa70f9a65e in ntdll!TpCallbackMayRunLong () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#3  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#4  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 22 (Thread 31592.0x5c9c):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6d41951a in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#2  0x00007ffa6d4191f2 in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#3  0x00007ffa70ba19b1 in select () from C:/Windows/System32/ws2_32.dll
+No symbol table info available.
+#4  0x00007ff7ad5a7d23 in mdns_thread ()
+No symbol table info available.
+#5  0x00007ffa5788766d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#6  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#7  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#8  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#9  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#10 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 21 (Thread 31592.0x94c4):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6d41951a in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#2  0x00007ffa6d4191f2 in ?? () from C:/Windows/system32/mswsock.dll
+No symbol table info available.
+#3  0x00007ffa70ba19b1 in select () from C:/Windows/System32/ws2_32.dll
+No symbol table info available.
+#4  0x00007ff7ad59b08f in httpd_thread ()
+No symbol table info available.
+#5  0x00007ffa5788766d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libwinpthread-1.dll
+No symbol table info available.
+#6  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#7  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#8  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#9  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#10 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 20 (Thread 31592.0x1ac4 "pool-1"):
+#0  0x00007ffa710e4a14 in ntdll!ZwWaitForAlertByThreadId () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa7102298e in ntdll!RtlSleepConditionVariableSRW () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2a58 in SleepConditionVariableSRW () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ffa539237c7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstapp-1.0-0.dll
+No symbol table info available.
+#4  0x00007ffa3c64ca1d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#5  0x00007ffa3c64fa2f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#6  0x00007ff9cef8ef11 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#7  0x00007ff9cf0cdd92 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#8  0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#9  0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#10 0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#11 0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#12 0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#13 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#14 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 19 (Thread 31592.0x331c "pool-0"):
+#0  0x00007ff9cef59300 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#1  0x00007ffa3c65b845 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#2  0x00007ff9cef548a2 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#3  0x00007ff9cef54cd3 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#4  0x00007ff9cefa1824 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#5  0x00007ffa3c65b95a in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#6  0x00007ff9cef548a2 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#7  0x00007ff9cef54cd3 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#8  0x00007ff9cefa1824 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#9  0x00007ff9cee3837c in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstvideo-1.0-0.dll
+No symbol table info available.
+#10 0x00007ff9cee1d4a6 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstvideo-1.0-0.dll
+No symbol table info available.
+#11 0x00007ff9cef548a2 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#12 0x00007ff9cef54cd3 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#13 0x00007ff9cefa1824 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#14 0x00007ff9ceb0a37d in ensure_caps_profile (h264parse=0x1f1146de450, caps=0x1f1146efc60, sps=0x1f114787a50) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/gst/videoparsers/gsth264parse.c:1952
+        filter_caps = 0x1f1146efda0
+        peer_caps = 0x1f1146eec70
+        compat_caps = <optimized out>
+        __func__ = "ensure_caps_profile"
+#15 gst_h264_parse_update_src_caps (h264parse=<optimized out>, caps=0x1f1146efc60) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/gst/videoparsers/gsth264parse.c:2512
+        profile = <optimized out>
+        level = <optimized out>
+        mdi_str = 0x0
+        cll_str = 0x0
+        codec_data_modified = 0
+        sps = <optimized out>
+        sink_caps = 0x1f1146ede60
+        src_caps = <optimized out>
+        modified = <optimized out>
+        buf = 0x0
+        s = 0x1f1146f5ab0
+        __func__ = "gst_h264_parse_update_src_caps"
+#16 0x00007ff9ceb0d819 in gst_h264_parse_parse_frame (parse=0x1f1146de450, frame=0x1f1146eeef0) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/gst/videoparsers/gsth264parse.c:2866
+        h264parse = 0x1f1146de450
+        buffer = 0x1f114840280
+        av = <optimized out>
+        __func__ = "gst_h264_parse_parse_frame"
+#17 0x00007ff9ceb0f152 in gst_h264_parse_handle_frame (parse=0x1f1146de450, frame=0x1f1146eeef0, skipsize=0xef8e3ff4b8) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/gst/videoparsers/gsth264parse.c:1645
+        h264parse = 0x1f1146de450
+        buffer = 0x1f114840280
+        map = {memory = 0x0, flags = 0, data = 0x0, size = 452, maxsize = 459, user_data = {0x0, 0x0, 0x0, 0x0}, _gst_reserved = {0x1f1146ddf00, 0x1f1146de450, 0x7ffa3c62bf20, 0x48}}
+        data = 0x1f11484d268 ""
+        size = <optimized out>
+        current_off = <optimized out>
+        drain = <optimized out>
+        nonext = <optimized out>
+        nalparser = <optimized out>
+        nalu = {ref_idc = 1, type = 5, idr_pic_flag = 1 '\001', size = 418, offset = 34, sc_offset = 30, valid = 1, data = 0x1f11484d268 "", header_bytes = 1 '\001', extension_type = 0 '\000', extension = {mvc = {non_idr_flag = 0 '\000', priority_id = 0 '\000', view_id = 0, temporal_id = 0 '\000', anchor_pic_flag = 0 '\000', inter_view_flag = 0 '\000'}}}
+        pres = <optimized out>
+        framesize = <optimized out>
+        __func__ = "gst_h264_parse_handle_frame"
+#18 0x00007ffa3c62c3d5 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#19 0x00007ffa3c6329b6 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstbase-1.0-0.dll
+No symbol table info available.
+#20 0x00007ff9cef4a162 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#21 0x00007ff9cef4cf4a in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#22 0x00007ff9cef559d7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#23 0x00007ffa0deb4cc8 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/lib/gstreamer-1.0/libgstcoreelements.dll
+No symbol table info available.
+#24 0x00007ff9cef8ef11 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libgstreamer-1.0-0.dll
+No symbol table info available.
+#25 0x00007ff9cf0cdd92 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#26 0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#27 0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#28 0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#29 0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#30 0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#31 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#32 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 18 (Thread 31592.0x6994 "pool-spawner"):
+#0  0x00007ffa710e4a14 in ntdll!ZwWaitForAlertByThreadId () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa7102298e in ntdll!RtlSleepConditionVariableSRW () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2a58 in SleepConditionVariableSRW () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ff9cf056d44 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#4  0x00007ff9cf0cd8a6 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#5  0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#6  0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#7  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#8  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#9  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#10 0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#11 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 17 (Thread 31592.0x7620 "d3d11-removed-m"):
+#0  0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e1a2773 in WaitForMultipleObjectsEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2641 in WaitForMultipleObjects () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ff9cdd84ac2 in gst_d3d11_device_removed_monitor_thread (self=0x1f1146e60e0) at ../gstreamer-1.28.8-src/subprojects/gst-plugins-bad/gst-libs/gst/d3d11/gstd3d11device.cpp:1027
+        priv = <optimized out>
+        waitables = {0x570, 0x574}
+        ret = <optimized out>
+#4  0x00007ff9cf0cce9f in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#5  0x00007ff9cf0cc6e7 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#6  0x00007ffa6f21f0ad in msvcrt!_beginthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#7  0x00007ffa6f21f17c in msvcrt!_endthreadex () from C:/Windows/System32/msvcrt.dll
+No symbol table info available.
+#8  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#9  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#10 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 16 (Thread 31592.0x3708):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 15 (Thread 31592.0x90b0):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa598fc78e in nvwgf2umx!SetDependencyInfo () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa598fc105 in nvwgf2umx!SetDependencyInfo () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa598f0c6d in nvwgf2umx!SetDependencyInfo () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa59e00dfa in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#6  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#7  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#8  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#9  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 14 (Thread 31592.0x6e2c):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 13 (Thread 31592.0xad08):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 12 (Thread 31592.0x7880):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 11 (Thread 31592.0x2fbc):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 10 (Thread 31592.0x6978):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 9 (Thread 31592.0x858):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59ca4668 in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa59ca458f in nvwgf2umx!OpenAdapter12 () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 8 (Thread 31592.0x8e80):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59d2ad5f in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#5  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#6  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 7 (Thread 31592.0x430):
+#0  0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e1a2773 in WaitForMultipleObjectsEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa6e1a2641 in WaitForMultipleObjects () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#3  0x00007ffa594c0396 in nvwgf2umx!NVAPI_DirectMethods () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#5  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#6  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#7  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 6 (Thread 31592.0x78e0):
+#0  0x00007ffa710e0e44 in ntdll!ZwWaitForSingleObject () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e19be9f in WaitForSingleObjectEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ffa59cc8640 in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#3  0x00007ffa5a20f11a in nvwgf2umx!NVDEV_Thunk () from C:/Windows/System32/DriverStore/FileRepository/nv_dispsi.inf_amd64_fe1c50c690e00e9a/nvwgf2umx.dll
+No symbol table info available.
+#4  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#5  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#6  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 4 (Thread 31592.0x6184):
+#0  0x00007ffa710e4a74 in ntdll!ZwWaitForWorkViaWorkerFactory () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa70f9a65e in ntdll!TpCallbackMayRunLong () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#3  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#4  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 3 (Thread 31592.0xb134):
+#0  0x00007ffa710e4a74 in ntdll!ZwWaitForWorkViaWorkerFactory () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa70f9a65e in ntdll!TpCallbackMayRunLong () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#3  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#4  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 2 (Thread 31592.0x1d30):
+#0  0x00007ffa710e4a74 in ntdll!ZwWaitForWorkViaWorkerFactory () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa70f9a65e in ntdll!TpCallbackMayRunLong () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#2  0x00007ffa7045cd87 in KERNEL32!BaseThreadInitThunk () from C:/Windows/System32/kernel32.dll
+No symbol table info available.
+#3  0x00007ffa7102caec in ntdll!RtlUserThreadStart () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#4  0x0000000000000000 in ?? ()
+No symbol table info available.
+
+Thread 1 (Thread 31592.0x95a4):
+#0  0x00007ffa710e1914 in ntdll!ZwWaitForMultipleObjects () from C:/Windows/SYSTEM32/ntdll.dll
+No symbol table info available.
+#1  0x00007ffa6e1a2773 in WaitForMultipleObjectsEx () from C:/Windows/System32/KernelBase.dll
+No symbol table info available.
+#2  0x00007ff9cf0ab0e1 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#3  0x00007ff9cf0ab41d in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#4  0x00007ff9cf0aba14 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#5  0x00007ff9cf096f90 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#6  0x00007ff9cf097de0 in ?? () from D:/Development/Live-Stream System - Codex/native/airplay/runtime/bin/libglib-2.0-0.dll
+No symbol table info available.
+#7  0x00007ff7ad5c5a32 in main ()
+No symbol table info available.
+[Inferior 1 (process 31592) killed]
