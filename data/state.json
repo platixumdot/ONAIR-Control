@@ -23,13 +23,13 @@
     "id": "fb8599ff-0c44-40d1-bbff-55eff45472ce",
     "name": "Platix",
     "role": "CEO",
-    "company": "",
+    "company": "Serverix",
     "color": "#1677ff",
     "initials": "P"
   },
   "lowerThirdVisible": false,
   "countdown": {
-    "endsAt": 1789850720586,
+    "endsAt": 1792142412745,
     "visible": true,
     "title": "STREAM STARTS IN"
   },
@@ -45,6 +45,11 @@
       "id": "fc4c2e82-604c-49b0-8637-2f0dca67ffa0",
       "name": "Test",
       "token": "xxxxxxx"
+    },
+    {
+      "id": "4e2d8730-d94c-4082-b628-ab90766b5ca0",
+      "name": "ASD",
+      "token": "93077701e722f4fbbebce5a4fefcac5d13975a09a0c9237776caf6109f3143f4"
     }
   ],
   "infoBanner": {

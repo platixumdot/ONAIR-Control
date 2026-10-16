@@ -96,9 +96,43 @@ Für den OBS-Ton wird die Audioausgabe der Browser-Quelle in OBS umgeleitet. Kon
 
 ---
 
+## AirPlay-Bildschirmspiegelung
+
+ONAir Control kann unter Windows als AirPlay-Empfänger für die Bildschirmspiegelung von iPhone, iPad und Mac gestartet werden. Der Empfänger läuft als native Hintergrundkomponente; für OBS wird kein Plugin benötigt.
+
+### Einmaliger Build
+
+Der native Empfänger wird lokal gebaut und gebündelt. Dafür werden Windows, Git und MSYS2 benötigt. MSYS2 kann zum Beispiel über `winget install MSYS2.MSYS2` installiert werden. Danach im Projektverzeichnis ausführen:
+
+```powershell
+npm run airplay:build
+```
+
+Das Skript installiert die erforderlichen MSYS2-Build-Abhängigkeiten und erzeugt die Laufzeitdateien unter `native/airplay/runtime`. Für den Build werden die passenden GStreamer-Quellen aus dem offiziellen GStreamer-Repository geladen; eine Internetverbindung ist erforderlich. Danach ONAIR Control wie gewohnt starten.
+
+### Verbinden und in OBS einfügen
+
+1. Im Control Center **Live Production → AirPlay Screen Mirroring** öffnen und **AirPlay-Empfänger starten** klicken.
+2. iPhone oder iPad: Kontrollzentrum öffnen und **Bildschirmsynchronisierung** wählen. Mac: in der Menüleiste **Bildschirmsynchronisierung** öffnen. **ONAir AirPlay** auswählen.
+3. In ONAIR Control warten, bis **Bildschirm wird gespiegelt** angezeigt wird. Dann eine OBS-Zielszene auswählen und **Abgerundete AirPlay-Quelle hinzufügen** anklicken.
+
+ONAir Control startet UxPlay mit sichtbarem Fenster und verwendet für den aktuellen Diagnoseversuch den GTX-1650-D3D11-H.264-Decoder (`d3d11h264dec`), `d3d11download` und `d3d11videosink`; OBS-WGC (`method=2`) zeigte damit beim echten Gerätetest das iPad-Bild. Der Softwaredecoder (`avdec_h264`) und auch `glimagesink` stürzten beim Wechsel des Streams von 1554×1080 auf 1920×1080 mit `0xC0000005` ab. Der aktuelle Diagnose-Build schaltet Audio mit `-as 0` ab, um die H.264-Decodierung weiter abzugrenzen. Das ist keine bestätigte Stabilitätskorrektur; während dieses Tests ist kein AirPlay-Ton zu erwarten. Beim Hinzufügen der OBS-Quelle wird jetzt ausdrücklich das Direct3D11-Fenster gewählt und ein OpenGL-Fenster nicht mehr als Ersatz akzeptiert. Die AirPlay-/GStreamer-Zeitstempelsynchronisierung wird mit UxPlays `-vsync no` abgeschaltet. Eine bloße AirPlay-Steuerverbindung oder ein GStreamer-Zustand `PLAYING` gilt nicht als laufendes Bild: ONAIR meldet den Videostream erst, wenn dekodierte Frames den H.264/H.265-Videosink erreichen, und setzt den Status nach 3,5 Sekunden ohne neue Frames zurück. Pausen und Videofehler beenden den Status ebenfalls.
+
+Nach dem Update ONAIR neu starten und den Empfänger erneut starten. Beim Hinzufügen aktiviert ONAIR die Fensteraufnahme, wartet bis zu zehn Sekunden auf das UxPlay-Videofenster, wählt es aus, fügt es der gewählten Szene hinzu und aktiviert den Alpha-Maskenfilter mit abgerundeten Ecken. Unter Windows 10 (1903+) und Windows 11 wird OBS explizit auf die Windows Graphics Capture-Methode (WGC, `method=2`) gesetzt, statt die automatische Erkennung zu verwenden. OBS 32 und neuer verwendet dabei die UUIDs der Hauptcanvas, Szenen und Quellelemente. Beim Trennen des Geräts bleibt der Empfänger aktiv und kann erneut verbunden werden. UxPlay-/GStreamer-Ausgaben, Frame-Marker und Exitcodes werden mit Zeitstempel in `data/airplay.log` geschrieben. Ein erneuter Streamstart nach Pause oder Verbindungsabbruch sowie die sichtbare OBS-Ausgabe müssen mit dem iPad und der lokalen OBS-Instanz geprüft werden; der Frame-Marker bestätigt Frames am GStreamer-Videosink, nicht deren tatsächliche Sichtbarkeit im OBS-Canvas.
+
+Apple-Gerät und Produktionsrechner müssen sich im selben lokalen Netzwerk befinden. Erlaube ONAIR Control beziehungsweise dem AirPlay-Empfänger in der Windows-Firewall den Zugriff auf private Netzwerke und stelle sicher, dass Bonjour/mDNS im Netzwerk nicht blockiert wird. AirPlay sollte nicht ungeschützt über das Internet erreichbar gemacht werden. Die integrierte Empfangskomponente ist derzeit nur für Windows vorgesehen.
+
+Beim letzten echten iPad-Test blieb der D3D11-Ausgabepfad mit Audio deaktiviert stabil, bis das iPad bei Videostart von 1554×1080 auf 1920×1080 wechselte; laut lokalem Log folgte der Absturz 226 ms später. Das Formular meldete zugleich einen längeren stabilen Zeitraum, daher ist die genaue Beobachtung beim nächsten Test wichtig. Der `avdec_h264`-Softwaredecoder sowie `glimagesink` zeigten denselben Fehler beim Auflösungswechsel. ONAIR setzte den Videostatus bei Pause zurück. OBS wählte bei einem Lauf ein altes OpenGL-Fenster statt des Direct3D11-Fensters; die Auswahl ist jetzt auf das aktuelle `GSTD3D11`-Fenster eingeschränkt. Im Log gab es NTP-Timeouts; sie sind keine bestätigte Ursache. Das Windows-Anwendungsprotokoll enthielt keinen passenden Fehlerbericht für den aktuellen Runtime-Absturz; ältere UxPlay-Fehlerberichte bezogen sich auf einen separaten temporären Build. Der nächste Test verwendet den D3D11-Hardwaredecoder; Dauerbetrieb, Auflösungswechsel, OBS-Ausgabe und Wiederverbindung bleiben zu bestätigen.
+
+### Lizenzen
+
+Der Empfänger verwendet UxPlay (GPLv3), GStreamer (LGPL) und weitere Bibliotheken mit eigenen Lizenzbedingungen. Die Lizenztexte für UxPlay und dessen eingebettete Komponenten liegen unter `native/airplay/licenses` beziehungsweise `native/airplay/source`; der Build bündelt außerdem die MSYS2-Lizenzhinweise unter `native/airplay/runtime/licenses/msys2`. Der zugehörige Quellcode befindet sich unter `native/airplay/source`. Beim Weitergeben eines Builds müssen die jeweiligen Lizenzbedingungen und Pflichten zur Bereitstellung des Quellcodes beachtet werden.
+
+---
+
 ## Browser-Source-Overlays
 
-ONAir Control kann Overlay-Quellen automatisch in OBS-Szenen anlegen.
+ONAIR Control kann Overlay-Quellen automatisch in OBS-Szenen anlegen.
 
 Öffne dazu im Control Center den Bereich **OBS Browser Sources**, wähle eine Zielszene und klicke auf:
 

@@ -1,9 +1,9 @@
 import 'dotenv/config'; import express from 'express'; import cors from 'cors'; import { randomBytes, timingSafeEqual } from 'node:crypto'; import path from 'node:path'; import { fileURLToPath } from 'node:url'; import { WebSocketServer, WebSocket } from 'ws';
 import type { RequestHandler } from 'express';
-import { loadState, saveState } from './store.js'; import { ObsControl } from './obs.js'; import type { AppState, PhoneCamera } from './types.js';
+import { loadState, saveState } from './store.js'; import { ObsControl } from './obs.js'; import { AirPlayReceiver } from './airplay.js'; import { ensureAirPlayMask } from './airplayMask.js'; import type { AppState, PhoneCamera } from './types.js';
 let state: AppState = loadState(); const app = express(); app.use(cors()); app.use(express.json()); const port = Number(process.env.PORT || 3010); const clients = new Set<WebSocket>(); const publishers = new Map<string, WebSocket>(); const viewers = new Map<string, Set<WebSocket>>();
-function snapshot() { const { phoneCameras: _privateCameras, ...publicState } = state; return { state: publicState, runtime: obs.runtime, phoneCameras: state.phoneCameras.map(({ id, name }) => ({ id, name, connected: publishers.get(id)?.readyState === WebSocket.OPEN })) }; } function broadcast() { const message = JSON.stringify({ type: 'state', ...snapshot() }); clients.forEach(c => c.readyState === WebSocket.OPEN && c.send(message)); }
-const obs = new ObsControl(broadcast); obs.configure(state.obs.url, state.obs.password); function initials(name: string) { return name.trim().split(/\s+/).slice(0, 2).map(x => x[0]?.toUpperCase()).join(''); }
+function snapshot() { const { phoneCameras: _privateCameras, ...publicState } = state; return { state: publicState, runtime: obs.runtime, airplay: airplay.status, phoneCameras: state.phoneCameras.map(({ id, name }) => ({ id, name, connected: publishers.get(id)?.readyState === WebSocket.OPEN })) }; } function broadcast() { const message = JSON.stringify({ type: 'state', ...snapshot() }); clients.forEach(c => c.readyState === WebSocket.OPEN && c.send(message)); }
+const airplay = new AirPlayReceiver(broadcast); const obs = new ObsControl(broadcast); obs.configure(state.obs.url, state.obs.password); function initials(name: string) { return name.trim().split(/\s+/).slice(0, 2).map(x => x[0]?.toUpperCase()).join(''); }
 const requireSameOrigin: RequestHandler = (req, res, next) => {
   const origin = req.get('origin');
   if (origin) {
@@ -62,11 +62,18 @@ app.post('/api/action', async (req, res) => { const { action, payload = {} } = r
   else if (action === 'countdown') { state.countdown = { ...state.countdown, visible: Boolean(payload.visible), endsAt: payload.seconds ? Date.now() + Number(payload.seconds) * 1000 : state.countdown.endsAt, title: String(payload.title || state.countdown.title) }; saveState(state); }
   else if (action === 'addBrowserSource') { const base = String(payload.baseUrl || 'http://localhost:5173'); const kind = String(payload.kind); const name = kind === 'countdown' ? 'ONAIR Starting Soon' : kind === 'info-banner' ? 'ONAIR Info Banner' : 'ONAIR Lower Third'; const url = kind === 'info-banner' ? `${base}/overlay-info-banner.html` : `${base}/overlay/${kind}`; await obs.addBrowserSource(String(payload.scene), name, url, 1920, 1080); }
   else if (action === 'addPhoneCameraSource') { const camera = state.phoneCameras.find((item) => item.id === String(payload.cameraId)); if (!camera) throw new Error('Handykamera nicht gefunden.'); const base = new URL(String(payload.baseUrl)); if (!['http:', 'https:'].includes(base.protocol)) throw new Error('Ungültige Adresse für die Browser-Source.'); await obs.addBrowserSource(String(payload.scene), `ONAIR Handykamera - ${camera.name}`, `${base.origin}/phone-camera/${camera.id}`, 1920, 1080, true); }
+  else if (action === 'startAirPlay') airplay.start();
+  else if (action === 'stopAirPlay') await airplay.stop();
+  else if (action === 'addAirPlaySource') {
+    if (!airplay.status.running || !airplay.status.connected) throw new Error('Verbinde zuerst ein Apple-Gerät mit „ONAir AirPlay“.');
+    if (!airplay.status.videoStreaming) throw new Error('Starte zuerst die Bildschirmsynchronisierung und warte, bis das iPad-Bild gespiegelt wird.');
+    await obs.addAirPlaySource(String(payload.scene), 'ONAIR AirPlay', ensureAirPlayMask(path.join(root, 'data')));
+  }
   else if (action === 'music') await obs.music(String(payload.input), payload.mediaAction);
   else throw new Error('Unbekannte Aktion.'); broadcast(); res.json({ ok: true, ...snapshot() });
 } catch (e) { const message = e instanceof Error ? e.message : 'Action failed'; obs.runtime.lastError = message; broadcast(); res.status(400).json({ error: message }); } });
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'); app.use(express.static(path.join(root, 'public'))); app.use(express.static(path.join(root, 'dist'))); app.get('/{*splat}', (_, res) => res.sendFile(path.join(root, 'dist', 'index.html')));
-const server = app.listen(port, () => console.log(`[OnAir] Control layer listening on :${port}`)); const wss = new WebSocketServer({ server, path: '/ws' });
+const server = app.listen(port, () => console.log(`[OnAir] Control layer listening on :${port}`)); server.on('close', () => { void airplay.stop().catch(error => console.error('[OnAir] Failed to stop AirPlay receiver:', error)); }); const wss = new WebSocketServer({ server, path: '/ws' });
 wss.on('connection', (ws, request) => {
   const params = new URL(request.url || '/', 'http://localhost').searchParams;
   const role = params.get('role');

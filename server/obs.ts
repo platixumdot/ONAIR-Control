@@ -80,5 +80,153 @@ export class ObsControl {
       await this.obs.call('CreateSceneItem', { sceneName, sourceName: inputName, sceneItemEnabled: true });
     }
   }
+  async addAirPlaySource(sceneName: string, inputName: string, maskPath: string) {
+    this.ensure();
+    const version = await this.obs.call('GetVersion') as { obsVersion: string };
+    const versionMatch = version.obsVersion.match(/^(\d+)/);
+    if (!versionMatch) throw new Error(`Unbekannte OBS-Version: ${version.obsVersion}`);
+    let canvasUuid: string | undefined;
+    if (Number(versionMatch[1]) >= 32) {
+      const canvasList = await this.obs.call('GetCanvasList') as {
+        canvases: { canvasUuid: string; canvasFlags: { MAIN?: boolean } }[];
+      };
+      canvasUuid = canvasList.canvases.find((canvas) => canvas.canvasFlags.MAIN)?.canvasUuid;
+      if (!canvasUuid) throw new Error('Die OBS-Hauptcanvas konnte nicht gefunden werden.');
+    }
+
+    const inputs = await this.obs.call('GetInputList') as {
+      inputs: { inputName: string; inputKind: string; inputUuid?: string }[];
+    };
+    const existing = inputs.inputs.find((input) => input.inputName === inputName);
+    if (existing && existing.inputKind !== 'window_capture') {
+      throw new Error(`OBS-Quelle „${inputName}“ existiert bereits, ist aber keine Fensteraufnahme.`);
+    }
+
+    const created = !existing;
+    let inputUuid = existing?.inputUuid;
+    let sceneItemId: number | undefined;
+    if (created) {
+      const result = await this.obs.call('CreateInput', {
+        ...(canvasUuid ? { canvasUuid } : {}),
+        sceneName,
+        inputName,
+        inputKind: 'window_capture',
+        inputSettings: { capture_cursor: false, client_area: true, method: 2, window: '' },
+        sceneItemEnabled: true,
+      }) as { inputUuid: string; sceneItemId: number };
+      inputUuid = result.inputUuid;
+      sceneItemId = result.sceneItemId;
+    }
+
+    try {
+      let window: { itemName?: unknown; itemValue?: unknown } | undefined;
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        const propertyList = await this.obs.call('GetInputPropertiesListPropertyItems', {
+          ...(inputUuid ? { inputUuid } : { inputName }),
+          propertyName: 'window',
+        }) as { propertyItems: { itemName?: unknown; itemValue?: unknown }[] };
+        window = propertyList.propertyItems.find((item) => {
+          const label = [item.itemName, item.itemValue]
+            .filter((value): value is string => typeof value === 'string')
+            .join(' ')
+            .toLowerCase();
+          return label.includes('uxplay.exe')
+            && (label.includes('gstd3d11') || label.includes('direct3d11 renderer'));
+        });
+        if (window || attempt === 19) break;
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+      if (typeof window?.itemValue !== 'string') {
+        throw new Error(
+          'OBS findet das Direct3D11-UxPlay-Videofenster nicht. „AirPlay-Gerät verbunden“ bestätigt nur die Verbindung, nicht den laufenden Bildschirmstream. Starte die Bildschirmsynchronisierung auf dem Apple-Gerät und versuche es erneut, sobald das Bild ausgegeben wird. OBS und ONAIR sollten mit denselben Administratorrechten laufen.',
+        );
+      }
+
+      await this.obs.call('SetInputSettings', {
+        ...(inputUuid ? { inputUuid } : { inputName }),
+        inputSettings: {
+          capture_cursor: false,
+          client_area: true,
+          method: 2,
+          window: window.itemValue,
+        },
+        overlay: true,
+      });
+
+      if (!created) {
+        const scene = await this.obs.call('GetSceneItemList', {
+          ...(canvasUuid ? { canvasUuid } : {}),
+          sceneName,
+        }) as {
+          sceneItems: { sourceName: string; sourceUuid?: string; sceneItemId: number }[];
+        };
+        const sceneItem = scene.sceneItems.find((item) =>
+          inputUuid ? item.sourceUuid === inputUuid : item.sourceName === inputName,
+        );
+        if (sceneItem) {
+          sceneItemId = sceneItem.sceneItemId;
+        } else {
+          const createdSceneItem = await this.obs.call('CreateSceneItem', {
+            ...(canvasUuid ? { canvasUuid } : {}),
+            sceneName,
+            ...(inputUuid ? { sourceUuid: inputUuid } : { sourceName: inputName }),
+            sceneItemEnabled: true,
+          }) as { sceneItemId: number };
+          sceneItemId = createdSceneItem.sceneItemId;
+        }
+      }
+      if (sceneItemId === undefined) throw new Error(`OBS hat keine Szenenquelle für „${inputName}“ erstellt.`);
+      await this.obs.call('SetSceneItemEnabled', {
+        ...(canvasUuid ? { canvasUuid } : {}),
+        sceneName,
+        sceneItemId,
+        sceneItemEnabled: true,
+      });
+
+      const filterName = 'ONAIR Rounded Corners';
+      const filters = await this.obs.call('GetSourceFilterList', {
+        ...(canvasUuid ? { canvasUuid } : {}),
+        ...(inputUuid ? { sourceUuid: inputUuid } : { sourceName: inputName }),
+      }) as {
+        filters: { filterName: string; filterKind: string }[];
+      };
+      const existingFilter = filters.filters.find((filter) => filter.filterName === filterName);
+      if (existingFilter && existingFilter.filterKind !== 'mask_filter') {
+        throw new Error(`Der OBS-Filter „${filterName}“ existiert bereits mit einem anderen Typ.`);
+      }
+      const defaults = await this.obs.call('GetSourceFilterDefaultSettings', {
+        filterKind: 'mask_filter',
+      }) as { defaultFilterSettings: Record<string, unknown> };
+      const defaultOpacity = defaults.defaultFilterSettings.opacity;
+      const filterSettings = {
+        ...defaults.defaultFilterSettings,
+        type: 'mask_alpha_filter.effect',
+        image_path: maskPath,
+        opacity: typeof defaultOpacity === 'number' && defaultOpacity > 1 ? 100 : 1,
+        stretch: true,
+      };
+
+      if (existingFilter) {
+        await this.obs.call('SetSourceFilterSettings', {
+          ...(canvasUuid ? { canvasUuid } : {}),
+          ...(inputUuid ? { sourceUuid: inputUuid } : { sourceName: inputName }),
+          filterName,
+          filterSettings,
+          overlay: true,
+        });
+      } else {
+        await this.obs.call('CreateSourceFilter', {
+          ...(canvasUuid ? { canvasUuid } : {}),
+          ...(inputUuid ? { sourceUuid: inputUuid } : { sourceName: inputName }),
+          filterName,
+          filterKind: 'mask_filter',
+          filterSettings,
+        });
+      }
+    } catch (error) {
+      if (created) await this.obs.call('RemoveInput', { inputName });
+      throw error;
+    }
+  }
   async music(inputName: string, action: 'PLAY_PAUSE' | 'RESTART' | 'STOP') { this.ensure(); await this.obs.call('TriggerMediaInputAction', { inputName, mediaAction: `OBS_WEBSOCKET_MEDIA_INPUT_ACTION_${action}` }); }
 }

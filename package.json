@@ -1,6 +1,6 @@
 {
   "name": "onair-control",
-  "version": "0.6.6-alpha",
+  "version": "0.7.0-alpha",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,7 @@
     "dev:client": "wait-on tcp:3010 && vite --host",
     "dev:server": "tsx watch server/index.ts",
     "build": "tsc -b && vite build",
+    "airplay:build": "powershell -ExecutionPolicy Bypass -File native/airplay/build.ps1",
     "start": "tsx server/index.ts",
     "test": "vitest run"
   },

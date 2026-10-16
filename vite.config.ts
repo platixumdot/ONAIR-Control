@@ -4,6 +4,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    watch: {
+      ignored: ['**/native/airplay/runtime/**', '**/data/airplay.log'],
+    },
     proxy: {
       '/api': { target: 'http://127.0.0.1:3010' },
       '/ws': { target: 'ws://127.0.0.1:3010', ws: true },

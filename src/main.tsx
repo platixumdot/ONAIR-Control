@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   MantineProvider,
@@ -40,6 +40,7 @@ import { getSceneBadgeState } from './sceneState';
 type Person = { id: string; name: string; role: string; company?: string; color: string; initials: string };
 type InputSource = { name: string; kind: string; muted: boolean };
 type PhoneCamera = { id: string; name: string; connected: boolean };
+type AirPlayStatus = { available: boolean; running: boolean; connected: boolean; videoStreaming: boolean; deviceName: string | null; error: string | null };
 type State = {
   obs: { url: string; password: string };
   branding: { primary: string; show: string };
@@ -61,7 +62,7 @@ type Runtime = {
   studioMode: boolean;
   lastError: string | null;
 };
-type Feed = { state: State; runtime: Runtime; s: State; phoneCameras: PhoneCamera[] };
+type Feed = { state: State; runtime: Runtime; s: State; phoneCameras: PhoneCamera[]; airplay: AirPlayStatus };
 type Banner = { visible: boolean; headline: string; detail: string };
 
 const api = async (action: string, payload: object = {}) => {
@@ -486,7 +487,85 @@ function Live({ d }: { d: Feed }) {
         </Paper>
       </SimpleGrid>
       <PhoneCamerasPanel cameras={d.phoneCameras} scene={targetScene} connected={r.connected} />
+      <AirPlayPanel status={d.airplay} scene={targetScene} obsConnected={r.connected} />
     </Stack>
+  );
+}
+
+function AirPlayPanel({ status, scene, obsConnected }: { status: AirPlayStatus; scene: string; obsConnected: boolean }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+
+  const run = async (action: 'startAirPlay' | 'stopAirPlay' | 'addAirPlaySource') => {
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      await api(action, action === 'addAirPlaySource' ? { scene } : {});
+      if (action === 'addAirPlaySource') {
+        setNotice(`Abgerundete AirPlay-Quelle wurde der OBS-Szene „${scene}“ hinzugefügt bzw. aktiviert.`);
+      }
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'AirPlay-Aktion konnte nicht ausgeführt werden.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Paper p="lg" withBorder>
+      <Group justify="space-between" mb="sm">
+        <Group gap="xs">
+          <IconBroadcast size={19} />
+          <Text fw={700}>AirPlay Screen Mirroring</Text>
+        </Group>
+        <Badge color={status.videoStreaming ? 'teal' : status.connected ? 'blue' : status.running ? 'blue' : 'gray'}>
+          {status.videoStreaming ? 'Videostream aktiv' : status.connected ? 'AirPlay verbunden – warte auf Bildschirm' : status.running ? 'Bereit für AirPlay' : 'Empfänger aus'}
+        </Badge>
+      </Group>
+      <Text size="sm" c="dimmed" mb="md">
+        iPhone, iPad oder Mac ohne Zusatz-App verbinden. Das Display wird als OBS-Fensterquelle mit abgerundeten Ecken angelegt.
+      </Text>
+      <Group>
+        {!status.running ? (
+          <Button leftSection={<IconBroadcast size={16} />} loading={busy} onClick={() => run('startAirPlay')}>
+            AirPlay-Empfänger starten
+          </Button>
+        ) : (
+          <Button color="red" variant="light" loading={busy} onClick={() => run('stopAirPlay')}>
+            Empfänger stoppen
+          </Button>
+        )}
+        <Button
+          variant="light"
+          disabled={!status.videoStreaming || !scene || !obsConnected || busy}
+          loading={busy}
+          onClick={() => run('addAirPlaySource')}
+        >
+          Abgerundete OBS-Quelle hinzufügen
+        </Button>
+      </Group>
+      <Text size="xs" c="dimmed" mt="sm">
+        {status.videoStreaming
+          ? 'GStreamer empfängt laufend Videoframes. Du kannst sie jetzt als abgerundete Quelle in OBS einfügen.'
+          : status.connected
+            ? 'Die AirPlay-Verbindung steht. Öffne auf dem Apple-Gerät das Kontrollzentrum bzw. die Menüleiste → Bildschirmsynchronisierung und starte die Übertragung deines Bildschirms.'
+            : status.running
+              ? 'Öffne auf dem Apple-Gerät das Kontrollzentrum bzw. die Menüleiste → Bildschirmsynchronisierung → „ONAir AirPlay“.'
+              : 'Apple-Gerät und Produktionsrechner müssen im selben lokalen Netzwerk sein. Beim ersten Start kann Windows die Freigabe des lokalen Netzwerks abfragen.'}
+      </Text>
+      {status.deviceName && <Text size="xs" c="teal" mt="xs">Verbundenes Gerät: {status.deviceName}</Text>}
+      {status.running && <Text size="xs" c="dimmed" mt="xs">Empfängerprotokoll: data/airplay.log</Text>}
+      {!status.available && (
+        <Text size="sm" c="yellow" mt="sm">
+          Die native AirPlay-Komponente fehlt. Baue sie einmalig mit <code>npm run airplay:build</code>.
+        </Text>
+      )}
+      {status.error && <Text size="sm" c="red" mt="xs">{status.error}</Text>}
+      {error && <Text size="sm" c="red" mt="xs">{error}</Text>}
+      {notice && <Text size="sm" c="teal" mt="xs">{notice}</Text>}
+    </Paper>
   );
 }
 
